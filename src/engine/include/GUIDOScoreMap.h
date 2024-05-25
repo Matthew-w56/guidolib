@@ -314,7 +314,7 @@ GUIDOAPI bool	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSe
 #ifdef WIN32
     __declspec(deprecated("Deprecated function (not maintained code)."))
 #endif
-GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel, std::vector<MapElement>& outMap) GUIDOAPI_deprecated;
+GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel, std::vector<MapElement>& outMap);
 
 /** \brief Retrieves the rolled to unrolled time mapping
 

@@ -133,16 +133,17 @@ static GuidoErrCode checkParams( CGRHandler handle, int page)
 //----------------------------------------------------------------------
 GUIDOAPI GuidoErrCode	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoElementSelector sel, MapCollector& f)
 {
+	printf("GuidoGetMap\n");
 	GuidoErrCode err = checkParams (handle, page);
 	if (err != guidoNoErr) return err;
-	if ((sel < 0) || (sel >= kGuidoScoreElementEnd)) return guidoErrBadParameter; 
-	handle->grmusic->GetMap( page, w, h, sel, f );
+	if ((sel < 0) || (sel >= kGuidoScoreElementEnd)) return guidoErrBadParameter;
 	return guidoNoErr;
 }
 
 //----------------------------------------------------------------------
 GUIDOAPI GuidoErrCode	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
+	printf("GuidoGetPageMap\n");
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
 	GuidoMapCollector getmap (gr, kGuidoPage);
@@ -153,6 +154,7 @@ GUIDOAPI GuidoErrCode	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, floa
 //----------------------------------------------------------------------
 GUIDOAPI GuidoErrCode	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
 {
+	printf("GuidoGetStaffMap\n");
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
 	if (staff < 1) return guidoErrBadParameter; 

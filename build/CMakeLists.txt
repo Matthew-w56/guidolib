@@ -35,6 +35,8 @@ option ( MIN        "Includes only the library in the project" off)
 option ( MAKEFRAMEWORK  "Generates a MacOS framework" off)
 option ( BUILDJNI   "Includes JNI library build" off)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS YES CACHE BOOL "Export all symbols")
+
 #######################################
 # Output folders 
 set (BINDIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -150,7 +152,8 @@ file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*
 #######################################
 # set includes folders
 file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}  ${SRC_PATH}/* )
-set (INCDIRS ${INCDIRS} ${VGDEV_PATH} ${MSLIGHT_PATH})
+set (MY_HEADER_PATH /src/engine/include/MattWrapper.h)
+set (INCDIRS ${INCDIRS} ${VGDEV_PATH} ${MSLIGHT_PATH} ${MY_HEADER_PATH})
 
 #######################################
 # set library target
@@ -225,7 +228,7 @@ endif()
 
 target_compile_definitions (${target} PRIVATE ${DEFS})
 target_include_directories (${target} PRIVATE ${INCDIRS})
-target_link_libraries (${target} ${LINK})
+target_link_libraries (${target} ${LINK} -lstdc++)
 
 
 #######################################

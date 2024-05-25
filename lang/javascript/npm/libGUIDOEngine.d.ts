@@ -210,10 +210,10 @@ interface TimeMapCollector {
 }
 
 interface GuidoElementInfos {
-	type        : GuidoElementType;		
-	staffNum    : number;	
-	voiceNum    : number;	
-    midiPitch   : number; 
+	type        : GuidoElementType;
+	staffNum    : number;
+	voiceNum    : number;
+    midiPitch   : number;
 }
 
 interface GUIDOScoreMap {

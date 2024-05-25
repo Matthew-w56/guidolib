@@ -242,6 +242,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 //____________________________________________________________________________________
 void GRSingleNote::updateBoundingBox()
 {
+	printf("Updating bounding box for a note\n");
 	// - Call inherited
 	GRNote::updateBoundingBox();
 

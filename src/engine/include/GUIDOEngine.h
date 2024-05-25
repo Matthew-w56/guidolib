@@ -1,6 +1,8 @@
 #ifndef GUIDOEngine_H
 #define GUIDOEngine_H
 
+#include "MattWrapper.h"
+
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
@@ -14,6 +16,7 @@
   research@grame.fr
 
 */
+
 
 #include <ostream>
 #include <string>
@@ -391,7 +394,7 @@ representations.
 #ifdef WIN32
     __declspec(deprecated("Deprecated function : use ARHandler GuidoFile2AR (GuidoParser *parser, const char * file) instead."))
 #endif
-    GUIDOAPI GuidoErrCode	GuidoParseFile(const char * filename, ARHandler* ar) GUIDOAPI_deprecated;
+    GUIDOAPI GuidoErrCode	GuidoParseFile(const char * filename, ARHandler* ar);
 
 	/*!
         Parses a buffer and builds the corresponding abstract representation.
@@ -404,7 +407,7 @@ representations.
 #ifdef WIN32
     __declspec(deprecated("Deprecated function : use ARHandler GuidoString2AR (GuidoParser *parser, const char * str) instead."))
 #endif
-    GUIDOAPI GuidoErrCode	GuidoParseString(const char * str, ARHandler* ar) GUIDOAPI_deprecated;
+    GUIDOAPI GuidoErrCode	GuidoParseString(const char * str, ARHandler* ar);
 
 	/*!
         Transforms a Guido abstract representation into a Guido graphic representation.
@@ -494,7 +497,7 @@ representations.
 #ifdef WIN32
     __declspec(deprecated("Deprecated function : use GUIDOAPI GuidoErrCode GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
 #endif
-    GUIDOAPI int   GuidoGetParseErrorLine() GUIDOAPI_deprecated;
+    GUIDOAPI int   GuidoGetParseErrorLine();
 
 	/*!
         Gives the default values of the layout settings.
@@ -711,7 +714,7 @@ units.
 	#ifdef WIN32
 		__declspec(deprecated("Deprecated function : use GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
 	#endif
-	GUIDOAPI GuidoErrCode 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 ) GUIDOAPI_deprecated;
+	GUIDOAPI GuidoErrCode 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 );
 
     /** \brief Exports one page of score to SVG.
 	 *  If fontfile or fontspec are set, the font is added to svg. The fontfile has priority over the fontspec.
@@ -727,7 +730,7 @@ units.
 	#ifdef WIN32
 		__declspec(deprecated("Deprecated function : use GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
 	#endif
-	GUIDOAPI GuidoErrCode 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 ) GUIDOAPI_deprecated;
+	GUIDOAPI GuidoErrCode 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 );
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 
