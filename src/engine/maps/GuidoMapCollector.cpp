@@ -69,6 +69,7 @@ static bool intersect (const FloatRect& r1, const FloatRect& r2)
 //----------------------------------------------------------------------
 void GuidoMapCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
+	printf("GuidoMapCollector::Graph2TimeMap\n");
 	// Guido mapping filtering: the Guido map doesn't fit the Interlude mapping constraints and should be reworked.
 	if (fFilter && !(*fFilter)(infos))	return;		// element is filtered out 
 
@@ -91,6 +92,7 @@ void GuidoMapCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& 
 //----------------------------------------------------------------------
 void GuidoVoiceCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
+	printf("GuidoVoiceCollector::Graph2TimeMap\n");
 	// Guido mapping filtering: the Guido map doesn't fit the Interlude mapping constraints and should be reworked.
 	if (fFilter && !(*fFilter)(infos))	return;		// element is filtered out 
 
@@ -114,6 +116,7 @@ void GuidoVoiceCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment
 //----------------------------------------------------------------------
 void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
+	printf("GuidoVoiceAndBarCollector::Graph2TimeMap\n");
     if ( fStaffNum != 0 && (fStaffNum != infos.staffNum))   return; // other staves are filtered out if fStaffNum is defined
     if ( !box.IsValid() )	return;				// empty graphic segments are filtered out
     if ( infos.type == kEmpty) return;          // empty events are filtered out
@@ -144,6 +147,7 @@ void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeS
 //----------------------------------------------------------------------
 void GuidoMapCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
+	printf("GuidoMapCollector::process\n");
 	fOutMap = outmap;
 	if (!fOutMap) return;
 	GuidoGetMap( fGRHandler, page, w, h, fSelector, *this );
@@ -202,6 +206,7 @@ static void reduce (const std::vector<std::pair<TimeSegment, FloatRect> >& elts,
 //----------------------------------------------------------------------
 void GuidoStaffCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
+	printf("GuidoStaffCollector::Graph2TimeMap\n");
 	// We see if we have to process data or not (RAW)
 	if (!fGetRAWdata)
 	{
@@ -300,6 +305,7 @@ static bool scompare( const pair<TimeSegment, FloatRect>& a, const pair<TimeSegm
 // is extended toward left barline. For old behaviour, use GuidoStaffCollector::processV1.
 void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
+	printf("GuidoStaffCollector::process\n");
 	// We see if we have to process data or not (RAW)
 	if (fGetRAWdata)
 	{
@@ -330,6 +336,7 @@ void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* 
 // events x coordinate. To use new behaviour, see GuidoStaffCollector::process.
 void GuidoStaffCollector::processV1 (int page, float w, float h, Time2GraphicMap* outmap)
 {
+	printf("GuidoStaffCollector::processV1\n");
     // We see if we have to process data or not (RAW)
     if (fGetRAWdata)
     {
@@ -377,6 +384,7 @@ void GuidoMapCollector::getEvents (int page, float w, float h, bool keepLeftmost
 // barline. For old behaviour, use GuidoSystemCollector::processV1.
 void GuidoSystemCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
+	printf("GuidoSystemCollector::process\n");
 	Time2GraphicMap map, evmap, merged;
 	processNoDiv (page, w, h, &map);
     ///> A rest at a measure beginning has its segment box left value adjusted to the measure left.
@@ -390,6 +398,7 @@ void GuidoSystemCollector::process (int page, float w, float h, Time2GraphicMap*
 // To use the new behaviour, see GuidoSystemCollector::process.
 void GuidoSystemCollector::processV1 (int page, float w, float h, Time2GraphicMap* outmap)
 {
+	printf("GuidoSystemCollector::processV1\n");
     Time2GraphicMap map, evmap, merged;
     processNoDiv (page, w, h, &map);
 	
@@ -402,6 +411,7 @@ void GuidoSystemCollector::processV1 (int page, float w, float h, Time2GraphicMa
 //----------------------------------------------------------------------
 void GuidoSystemCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
+	printf("GuidoSystemCollector::Graph2TimeMap\n");
 	if ( dates.empty() )				return;				// empty time segments are filtered out
 	if ( !box.IsValid() )				return;				// empty graphic segments are filtered out
 	if ( infos.type == kGraceNote)      return;             // grace notes are filtered out
@@ -416,6 +426,7 @@ void GuidoSystemCollector::Graph2TimeMap( const FloatRect& box, const TimeSegmen
 //----------------------------------------------------------------------
 void GuidoSystemCollector::processNoDiv (int page, float w, float h, Time2GraphicMap* outmap)
 {
+	printf("GuidoSystemCollector::processNoDiv\n");
 	GuidoMapCollector systemCollector(fGRHandler, kGuidoSystem);
 	GuidoMapCollector slicesCollector(fGRHandler, kGuidoSystemSlice);
 

@@ -69,10 +69,23 @@ const char* mattWrapper_GR2SVG(void* gr_ptr, int page) {
 	return permVal;
 }
 
+void doPrintMap(Time2GraphicMap map, int result, char* name) {
+	// Example of using the map
+	printf("Mapping for map: %s\n", name);
+	printf("Mapping op result: %d\n", result);
+	printf("Mapping #1 for map: %d\n", map.begin());
+	for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++)
+	{
+		std::cout << "   [" << m->first.first << ", " << m->first.second << "]";
+		std::cout << " " << m->second << std::endl; 
+	}
+	printf("Done with: %s\n\n", name);
+}
+
 void* mattWrapper_getScoreMap(void* gr_ptr, int page, float width, float height, 
 				int selectorIn) {
 	// Do some initial casting
-	GRHandler* grHandler = static_cast<GRHandler*>(gr_ptr);
+	CGRHandler* grHandler = static_cast<CGRHandler*>(gr_ptr);
 	GuidoElementSelector selector = static_cast<GuidoElementSelector>(selectorIn);
 	
 	// Create filter and map collector
@@ -92,24 +105,37 @@ void* mattWrapper_getScoreMap(void* gr_ptr, int page, float width, float height,
 	);
 	
 	// TESTING CODE
-	Time2GraphicMap myNewMap = Time2GraphicMap();
-	GuidoGetStaffMap(
+	Time2GraphicMap staffMap = Time2GraphicMap();
+	int staffMapResult = GuidoGetStaffMap(
 		*grHandler,
 		page,
 		width,
 		height,
 		1,
-		myNewMap
+		staffMap
+	);
+	Time2GraphicMap pageMap = Time2GraphicMap();
+	int pageMapResult = GuidoGetPageMap(
+		*grHandler,
+		page,
+		width,
+		height,
+		pageMap
+	);
+	Time2GraphicMap voiceMap = Time2GraphicMap();
+	int voiceMapResult = GuidoGetVoiceMap(
+		*grHandler,
+		page,
+		width,
+		height,
+		1,
+		voiceMap
 	);
 	
-	// Example of using the map
-	printf("Doing the mapping 2!!!!!\n");
-	printf("First mapping of newMap: %f\n", myNewMap.begin());
-	for (Time2GraphicMap::const_iterator m = myNewMap.begin(); m != myNewMap.end(); m++)
-	{
-		std::cout << "[" << m->first.first << ", " << m->first.second << "]";
-		std::cout << " " << m->second << std::endl; 
-	}
+	printf("\n");
+	doPrintMap(staffMap, staffMapResult, "Staff Map");
+	doPrintMap(pageMap, pageMapResult, "Page Map");
+	doPrintMap(voiceMap, voiceMapResult, "Voice Map");
 	
 	printf("Did mapping for map, from gr pointer with %d pages\n", GuidoGetPageCount(*grHandler));
 	printf("System Count: %d\n", GuidoGetSystemCount(*grHandler, 1));

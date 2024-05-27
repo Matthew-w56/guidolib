@@ -27,6 +27,7 @@
 #include "GRMusic.h"
 #include "SVGDevice.h"
 #include "GuidoMapCollector.h"
+#include "MattMapCollector.h"
 
 using namespace std;
 using namespace guido;
@@ -133,7 +134,7 @@ static GuidoErrCode checkParams( CGRHandler handle, int page)
 //----------------------------------------------------------------------
 GUIDOAPI GuidoErrCode	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoElementSelector sel, MapCollector& f)
 {
-	printf("GuidoGetMap\n");
+	printf("GuidoGetMap (page %d) (w/h: %f/%f) (sel: %d)\n", page, w, h, sel);
 	GuidoErrCode err = checkParams (handle, page);
 	if (err != guidoNoErr) return err;
 	if ((sel < 0) || (sel >= kGuidoScoreElementEnd)) return guidoErrBadParameter;
@@ -158,6 +159,7 @@ GUIDOAPI GuidoErrCode	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, flo
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
 	if (staff < 1) return guidoErrBadParameter; 
+	printf("- Got past checks in staffmap\n");
 	GuidoStaffCollector getmap (gr, staff);
 	getmap.process (pagenum, w, h, &outmap);
 	return guidoNoErr;

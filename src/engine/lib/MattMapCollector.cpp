@@ -33,7 +33,7 @@ static bool mTimeAndBoxRightmostCompare( const pair<TimeSegment, FloatRect>& a, 
 
 
 void MattMapCollector::Graph2TimeMap(const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos) {
-	printf("MatMapCollector::Graph2TimeMap\n");
+	printf("MatMapCollector::Graph2TimeMap--------------------------------\n");
 	if (mFilter && !(*mFilter)(infos))	return;			// element is filtered out
 	if ( dates.empty() )				return;			// empty time segments are filtered out
 	if ( !box.IsValid() )				return;			// empty graphic segments are filtered out
@@ -45,7 +45,7 @@ void MattMapCollector::Graph2TimeMap(const FloatRect& box, const TimeSegment& da
 }
 
 void MattMapCollector::process (int page, float w, float h, Time2GraphicMap* outmap) {
-	printf("MattMapCollector::process (page %d)\n", page);
+	printf("MattMapCollector::process (page %d)-----------------------------------\n", page);
 	t2gMap = outmap;
 	if (!t2gMap) return;
 	GuidoGetMap( mGRHandler, page, w, h, mSelector, *this );
