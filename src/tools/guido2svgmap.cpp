@@ -94,12 +94,14 @@ int main(int argc, char **argv)
 	err = GuidoGetSVGMap( grh, page, sel, map);
 	if (err != guidoNoErr) error (err);
 	
+	cout << "( [left, right] [top, bottom] ) maps to ( [start, end] )" << endl;
+	
 	for (size_t i = 0; i < map.size(); i++)
     {
 		FloatRect r = map[i].first;
 		TimeSegment time = map[i].second.time();
-		cout << "( [" << int(r.left) << "," << int(r.right) << "[ [" << int(r.top) << "," << int(r.bottom) << "[ ) "
-		<< " ( [" << time.first << ", " << time.second << "[ )" << endl;
+		cout << "( [" << int(r.left) << "," << int(r.right) << "] [" << int(r.top) << "," << int(r.bottom) << "] ) "
+		<< " ( [" << time.first << ", " << time.second << "] )" << endl;
 	}
 
     GuidoCloseParser(parser);
