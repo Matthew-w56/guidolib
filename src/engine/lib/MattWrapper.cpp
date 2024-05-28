@@ -2,12 +2,14 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "MattWrapper.h"
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
 #include "MattMapCollector.h"
 using guido::GuidoMapCollector;
+using std::vector;
 //using guido::GuidoMapCollector::Filter;
 
 int mattWrapper_constructor() {
@@ -69,76 +71,33 @@ const char* mattWrapper_GR2SVG(void* gr_ptr, int page) {
 	return permVal;
 }
 
-void doPrintMap(Time2GraphicMap map, int result, char* name) {
-	// Example of using the map
-	printf("Mapping for map: %s\n", name);
-	printf("Mapping op result: %d\n", result);
-	printf("Mapping #1 for map: %d\n", map.begin());
-	for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++)
-	{
-		std::cout << "   [" << m->first.first << ", " << m->first.second << "]";
-		std::cout << " " << m->second << std::endl; 
-	}
-	printf("Done with: %s\n\n", name);
-}
-
 void* mattWrapper_getScoreMap(void* gr_ptr, int page, float width, float height, 
 				int selectorIn) {
+	
 	// Do some initial casting
-	CGRHandler* grHandler = static_cast<CGRHandler*>(gr_ptr);
+	GRHandler* grHandler = static_cast<GRHandler*>(gr_ptr);
 	GuidoElementSelector selector = static_cast<GuidoElementSelector>(selectorIn);
 	
-	// Create filter and map collector
+	// Create map collector
 	MattMapCollector* myCollector = new MattMapCollector(
 		*grHandler,
 		selector
 	);
+	vector<MapElement> outmap;
+	int err = GuidoGetSVGMap(*grHandler, page, selector, outmap);
+	if (err != guidoNoErr) {
+		printf("Got error in map get!  Error $d!\n", err);
+	} else {
+		std::cout << "( [left, right] [top, bottom] ) maps to ( [start, end] )" << std::endl;
 	
-	// Run the actual getMap methods
-	GuidoGetMap (
-		*grHandler,
-		page,
-		width,
-		height,
-		selector,
-		*myCollector
-	);
-	
-	// TESTING CODE
-	Time2GraphicMap staffMap = Time2GraphicMap();
-	int staffMapResult = GuidoGetStaffMap(
-		*grHandler,
-		page,
-		width,
-		height,
-		1,
-		staffMap
-	);
-	Time2GraphicMap pageMap = Time2GraphicMap();
-	int pageMapResult = GuidoGetPageMap(
-		*grHandler,
-		page,
-		width,
-		height,
-		pageMap
-	);
-	Time2GraphicMap voiceMap = Time2GraphicMap();
-	int voiceMapResult = GuidoGetVoiceMap(
-		*grHandler,
-		page,
-		width,
-		height,
-		1,
-		voiceMap
-	);
-	
-	printf("\n");
-	doPrintMap(staffMap, staffMapResult, "Staff Map");
-	doPrintMap(pageMap, pageMapResult, "Page Map");
-	doPrintMap(voiceMap, voiceMapResult, "Voice Map");
-	
-	printf("Did mapping for map, from gr pointer with %d pages\n", GuidoGetPageCount(*grHandler));
-	printf("System Count: %d\n", GuidoGetSystemCount(*grHandler, 1));
+		for (size_t i = 0; i < outmap.size(); i++)
+		{
+			FloatRect r = outmap[i].first;
+			TimeSegment time = outmap[i].second.time();
+			std::cout << "( [" << int(r.left) << "," << int(r.right) << "] [" << int(r.top) << "," << int(r.bottom) << "] ) "
+			<< " ( [" << time.first << ", " << time.second << "] )" << std::endl;
+		}
+	}
 	
 	return (void*)myCollector;
 }

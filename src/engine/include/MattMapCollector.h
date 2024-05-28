@@ -25,9 +25,7 @@ class MattMapCollector: public MapCollector {
 				mSelector(selectorIn),
 				mFilter(filterIn),
 				t2gMap(0),
-				mInfos() { 
-					printf("MattMapCollector::Constructor\n");
-				 }
+				mInfos() {  }
 		
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		/*Good*/void process (int page, float w, float h, Time2GraphicMap* outmap);

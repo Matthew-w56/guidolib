@@ -69,7 +69,6 @@ static bool intersect (const FloatRect& r1, const FloatRect& r2)
 //----------------------------------------------------------------------
 void GuidoMapCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
-	printf("GuidoMapCollector::Graph2TimeMap\n");
 	// Guido mapping filtering: the Guido map doesn't fit the Interlude mapping constraints and should be reworked.
 	if (fFilter && !(*fFilter)(infos))	return;		// element is filtered out 
 
@@ -92,7 +91,6 @@ void GuidoMapCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& 
 //----------------------------------------------------------------------
 void GuidoVoiceCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
-	printf("GuidoVoiceCollector::Graph2TimeMap\n");
 	// Guido mapping filtering: the Guido map doesn't fit the Interlude mapping constraints and should be reworked.
 	if (fFilter && !(*fFilter)(infos))	return;		// element is filtered out 
 
@@ -116,7 +114,6 @@ void GuidoVoiceCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment
 //----------------------------------------------------------------------
 void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
-	printf("GuidoVoiceAndBarCollector::Graph2TimeMap\n");
     if ( fStaffNum != 0 && (fStaffNum != infos.staffNum))   return; // other staves are filtered out if fStaffNum is defined
     if ( !box.IsValid() )	return;				// empty graphic segments are filtered out
     if ( infos.type == kEmpty) return;          // empty events are filtered out
@@ -206,7 +203,6 @@ static void reduce (const std::vector<std::pair<TimeSegment, FloatRect> >& elts,
 //----------------------------------------------------------------------
 void GuidoStaffCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
-	printf("GuidoStaffCollector::Graph2TimeMap\n");
 	// We see if we have to process data or not (RAW)
 	if (!fGetRAWdata)
 	{
@@ -411,7 +407,6 @@ void GuidoSystemCollector::processV1 (int page, float w, float h, Time2GraphicMa
 //----------------------------------------------------------------------
 void GuidoSystemCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
-	printf("GuidoSystemCollector::Graph2TimeMap\n");
 	if ( dates.empty() )				return;				// empty time segments are filtered out
 	if ( !box.IsValid() )				return;				// empty graphic segments are filtered out
 	if ( infos.type == kGraceNote)      return;             // grace notes are filtered out
