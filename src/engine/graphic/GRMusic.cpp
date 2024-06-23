@@ -252,6 +252,18 @@ void GRMusic::GetMap( int inPage, float w, float h, GuidoElementSelector sel, Ma
 		page->GetMap( sel, f, infos );
 	}
 }
+
+void GRMusic::GetExtendedMap( int inPage, float w, float h, GuidoElementSelector sel, ExtendedMapCollector& f ) const
+{
+	const GRPage * page = getPage( inPage );
+	if( page ) {
+		MapInfos infos;
+		page->getScaling(w, h);
+		infos.fScale.x = w;
+		infos.fScale.y = h;
+		page->GetExtendedMap( sel, f, infos );
+	}
+}
 	
 void GRMusic::pagetrace(VGDevice & hdc)
 {

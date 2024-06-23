@@ -108,7 +108,9 @@ public:
 			bool GetShow() const			{ return mShow; }
 
 	virtual void SendMap (const NVRect& r, MapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
+	virtual void SendExtendedMap (const NVRect& r, ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
 	virtual void SendMap (MapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
+	virtual void SendExtendedMap (ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
 	virtual unsigned int getTextAlign() const;
 	
 	// 

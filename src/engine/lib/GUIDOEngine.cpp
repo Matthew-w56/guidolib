@@ -124,6 +124,17 @@ GUIDOAPI GuidoErrCode GuidoInitWithIndependentSVG()
 	return errcode;
 }
 
+GUIDOAPI GuidoErrCode GuidoInitWithIndependentSVGWithWH(int width, int height) {
+	GuidoInitDesc desc;
+
+	VGSystem * gSystem= new SVGSystem(_src_guido2_svg);
+	desc.graphicDevice = gSystem->CreateMemoryDevice(width, height);
+	desc.musicFont = kMusicFontStr;
+	desc.textFont  = "Times";
+	GuidoErrCode errcode = GuidoInit (&desc);
+	return errcode;
+}
+
 GUIDOAPI GuidoErrCode GuidoInit( GuidoInitDesc * desc )
 {
 	if( desc == 0 ) return guidoErrBadParameter;

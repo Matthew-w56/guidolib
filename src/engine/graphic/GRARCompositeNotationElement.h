@@ -48,6 +48,7 @@ class GRARCompositeNotationElement : public GRARNotationElement
 			
 			void		DrawSubElements( VGDevice & hdc ) const;
 			void		GetSubElementsMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+			void		GetSubElementsExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const;
 
 			void		RemoveAllSubElements();
 			GuidoPos	SetTailPosition(GuidoPos pos);

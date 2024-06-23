@@ -53,6 +53,13 @@ void GREmpty::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos
 	}
 }
 
+void GREmpty::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent) {
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kEmpty, infos);
+	}
+}
+
 void GREmpty::OnDraw( VGDevice & hdc ) const
 {
 	if (gBoundingBoxesMap & kEventsBB)

@@ -43,6 +43,7 @@ class GRRepeatEnd : public GRBar
 		virtual void	updateBoundingBox();
 		virtual void	setHPosition( float nx);
 		virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void 	GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const;
 		virtual void	OnDraw( VGDevice & hdc ) const;
 
 		virtual const NVPoint & getReferencePosition() const { return refpos; }

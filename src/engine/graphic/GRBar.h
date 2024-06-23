@@ -50,6 +50,7 @@ class GRBar : public GRTagARNotationElement
 		virtual void DrawWithGlyphs( VGDevice & hdc ) const;
 		virtual void DrawWithLines( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const;
 		virtual bool checkCollisionWith() const				{ return true; }
 		virtual void accept (GRVisitor& visitor);
 		virtual const GRBar * isGRBar() const				{ return this; }

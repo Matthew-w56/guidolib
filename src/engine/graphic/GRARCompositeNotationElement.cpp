@@ -156,6 +156,11 @@ void GRARCompositeNotationElement::GetSubElementsMap( GuidoElementSelector sel, 
 	mCompositeElements.GetMap( sel, f, infos );
 }
 
+void GRARCompositeNotationElement::GetSubElementsExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	mCompositeElements.GetExtendedMap( sel, f, infos );
+}
+
 // ----------------------------------------------------------------------------
 void 
 GRARCompositeNotationElement::RemoveAllSubElements()

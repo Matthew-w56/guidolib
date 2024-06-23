@@ -86,6 +86,12 @@ void GRRepeatEnd::GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& in
 		SendMap (f, getRelativeTimePosition(), getDuration(), kRepeatEnd, infos);
 }
 
+void GRRepeatEnd::GetExtendedMap(GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos) const
+{
+	if (sel == kGuidoBar || sel == kGuidoBarAndEvent)
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kRepeatEnd, infos);
+}
+
 // --------------------------------------------------------------------------
 void GRRepeatEnd::updateBoundingBox()
 {

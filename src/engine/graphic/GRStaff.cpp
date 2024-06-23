@@ -2199,6 +2199,24 @@ void GRStaff::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos
 	}
 }
 
+void GRStaff::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoStaff) {
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kStaff, infos);
+	}
+	else {
+		//	DrawNotationElements
+		infos.fPos.y += mPosition.y;
+		GuidoPos pos = mCompElements.GetHeadPosition();
+		while (pos)
+		{
+			GRNotationElement * e = mCompElements.GetNext(pos);
+			if (e) e->GetExtendedMap(sel, f, infos);
+		}
+		infos.fPos.y -= mPosition.y;
+	}
+}
+
 // ----------------------------------------------------------------------------
 /** \brief Draws the staff lines and notations elements.
 */

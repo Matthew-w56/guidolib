@@ -280,6 +280,12 @@ void GRClef::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos 
 		SendMap (f, getRelativeTimePosition(), getDuration(), kClef, infos);
 }
 
+void GRClef::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kClefSel)
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kClef, infos);
+}
+
 // -----------------------------------------------------------------------------
 void GRClef::DrawTAB(VGDevice & hdc, float size, float lspace) const
 {

@@ -60,6 +60,7 @@ class GRPage : public GREvent
 	virtual void	OnDraw( VGDevice & hdc ) const;
 	virtual void	OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos ) const;
 	virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+	virtual void	GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const;
 	
 	virtual void	print(std::ostream& os) const;
 	virtual void	accept (GRVisitor& visitor);

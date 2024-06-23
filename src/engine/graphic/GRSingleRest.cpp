@@ -167,6 +167,13 @@ void GRSingleRest::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 	}
 }
 
+void GRSingleRest::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent) {
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kRest, infos);
+	}
+}
+
 void GRSingleRest::DrawMultiMeasuresCount( VGDevice & hdc, int count, float x, float y, float ratio, const ARMMRest* mrest) const
 {
 	if (count < 0) return;

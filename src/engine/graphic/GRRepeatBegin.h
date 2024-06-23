@@ -43,7 +43,8 @@ public:
     virtual const NVPoint & getReferencePosition() const { return refpos; }
     virtual void            OnDraw(VGDevice & hdc ) const;
     virtual void            GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-    virtual void            updateBoundingBox();
+    virtual void 			GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const;
+	virtual void            updateBoundingBox();
     virtual void            tellPosition(GObject * caller, const NVPoint & newPosition);
     virtual void            setHPosition( float nx);
 

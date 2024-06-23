@@ -244,6 +244,25 @@ void GRSystemSlice::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos&
 	}
 }
 
+void GRSystemSlice::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoSystemSlice) {
+		if (mFirstEvXPosition) {
+			NVRect map = mMapping;
+			map.right = mFirstEvXPosition;
+			SendExtendedMap (map, f, getRelativeTimePosition(), TYPE_DURATION(0,1), kSystemSlice, infos);
+			map.left = mFirstEvXPosition;
+			map.right = mMapping.right;
+			SendExtendedMap (map, f, getRelativeTimePosition(), getDuration(), kSystemSlice, infos);
+		}
+		else SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kSystemSlice, infos);
+	}
+	else for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i ) {
+		GRStaff * staff = mStaffs->Get(i);
+		if (staff) staff->GetExtendedMap (sel, f, infos);
+	}
+}
+
 
 /** \brief Actually draws the SystemSlice.
 */

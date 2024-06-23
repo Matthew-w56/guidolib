@@ -94,6 +94,7 @@ class GObject
 
 		virtual void	OnDraw( VGDevice & hdc ) const = 0;
 		virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const {};
+		virtual void	GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos) const {};
 		virtual	void	DrawBoundingBox( VGDevice & hdc, const VGColor & inBrushColor ) const; // debug
 		
 		static bool		positionIsOnStaffLine( float inPositionY, float inLSpace );

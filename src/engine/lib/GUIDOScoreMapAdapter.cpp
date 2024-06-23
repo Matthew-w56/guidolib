@@ -16,7 +16,6 @@ GuidoErrCode GuidoScoreMapAdapter::getMap(CGRHandler gr, int pagenum, float widt
 	return ::GuidoGetMap(gr, pagenum, width, height, sel, f);
 }
 
-
 Time2GraphicMap GuidoScoreMapAdapter::getPageMap( CGRHandler gr, int pagenum, float w, float h)
 {
 	Time2GraphicMap outMap;

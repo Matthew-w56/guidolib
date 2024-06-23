@@ -306,6 +306,13 @@ void NEPointerList::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos&
 	while(pos) GetNext(pos)->GetMap(sel, f, infos);
 }
 
+void NEPointerList::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	//GRNotationElement* e;
+	GuidoPos pos = GetHeadPosition();
+	while(pos) GetNext(pos)->GetExtendedMap(sel, f, infos);
+}
+
 void NEPointerList::setPosition(const NVPoint & newPosition)
 {
 	GuidoPos pos=GetHeadPosition();

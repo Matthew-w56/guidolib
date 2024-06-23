@@ -326,6 +326,25 @@ void GRPage::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos 
 	infos.fPos.y -= mTopMargin;
 }
 
+void GRPage::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	GuidoPos pagepos = First();
+	while (pagepos)
+		GetNext(pagepos)->GetExtendedMap( sel, f, infos );
+
+	infos.fPos.x += mLeftMargin;
+	infos.fPos.y += mTopMargin;
+	if (sel == kGuidoPage)
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kPage, infos);
+	else {
+		for( SystemPointerList::const_iterator i = mSystems.begin(); i != mSystems.end(); i++ ) {
+			(*i)->GetExtendedMap(sel, f, infos);
+		}
+	}
+	infos.fPos.x -= mLeftMargin;
+	infos.fPos.y -= mTopMargin;
+}
+
 
 // ----------------------------------------------------------------------------
 /** \brief Draws the score page.

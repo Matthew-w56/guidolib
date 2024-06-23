@@ -144,6 +144,11 @@ void GRBar::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos )
 		SendMap (f, getRelativeTimePosition(), getDuration(), kBar, infos);
 }
 
+void GRBar::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoBar || sel == kGuidoBarAndEvent)
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kBar, infos);
+}
 
 // --------------------------------------------------------------------------
 void GRBar::DrawWithGlyphs( VGDevice & hdc ) const

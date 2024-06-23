@@ -243,3 +243,9 @@ void GRCluster::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& inf
 	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent)
         SendMap(f, firstNote->getARNote()->getRelativeTimePosition(), fDuration, kNote, infos);
 }
+
+void GRCluster::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent)
+        SendExtendedMap(f, firstNote->getARNote()->getRelativeTimePosition(), fDuration, kNote, infos);
+}

@@ -373,6 +373,8 @@ representations.
         where structures cannot be easily manipulated.
     */
     GUIDOAPI GuidoErrCode      GuidoInitWithIndependentSVG();
+	
+	GUIDOAPI GuidoErrCode      GuidoInitWithIndependentSVGWithWH(int width, int height);
 	/*!
         Guido Engine shutdown
 		

@@ -42,6 +42,7 @@ class GRMusic : public GREvent
 {
 	public:
 		using GObject::GetMap;
+		using GObject::GetExtendedMap;
 		
 				GRMusic(const ARMusic * inARMusic, const ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR );
 		virtual ~GRMusic();
@@ -90,30 +91,31 @@ class GRMusic : public GREvent
 
 		virtual void	DrawMusic( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos );
 		virtual void	GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const;
-
+		virtual void	GetExtendedMap( int inPage, float w, float h, GuidoElementSelector sel, ExtendedMapCollector& f ) const;
+		
 		virtual void	print(std::ostream& os) const;
 		virtual void	trace(VGDevice & hdc);
 		virtual void	pagetrace(VGDevice & hdc);
 		virtual void	voicetrace(VGDevice & hdc);
 
-				int 	getVoiceNum( ARMusicalVoice * arvoice ) const; 
-				void 	addPage( GRPage * newPage );
-                
-                void    setAR2GRTime(long time) { mAR2GRTime = time; }
-                long    getAR2GRTime()          { return mAR2GRTime; }
-                void    setDrawTime(long time)  { mDrawTime = time; }
-                long    getDrawTime()           { return mDrawTime; }
+		int 	getVoiceNum( ARMusicalVoice * arvoice ) const; 
+		void 	addPage( GRPage * newPage );
+		
+		void    setAR2GRTime(long time) { mAR2GRTime = time; }
+		long    getAR2GRTime()          { return mAR2GRTime; }
+		void    setDrawTime(long time)  { mDrawTime = time; }
+		long    getDrawTime()           { return mDrawTime; }
 
-				float	getNotesDensity () const;
-				bool	checkLyricsCollisions ();		// checks lyrics collisions and resolves the collisions if any
-				bool	collides () const					{ return !fCollisions.list().empty(); }
-				bool	lyricsChecked () const				{ return fLyricsChecked; }
-				void	removeAutoSpace (ARMusic * arm);// removes space tags inserted by checkLyricsCollisions()
+		float	getNotesDensity () const;
+		bool	checkLyricsCollisions ();		// checks lyrics collisions and resolves the collisions if any
+		bool	collides () const					{ return !fCollisions.list().empty(); }
+		bool	lyricsChecked () const				{ return fLyricsChecked; }
+		void	removeAutoSpace (ARMusic * arm);// removes space tags inserted by checkLyricsCollisions()
 
-				void	printVoices (std::ostream& os) const;
-    
-                void    setStaffSize(int staffNum, float size);
-                float   getStaffSize(int staffNum);
+		void	printVoices (std::ostream& os) const;
+
+		void    setStaffSize(int staffNum, float size);
+		float   getStaffSize(int staffNum);
 
 		std::vector<TCollisionInfo> getCollisions() const	{ return fCollisions.list(); }
 

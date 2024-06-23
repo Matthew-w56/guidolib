@@ -18,14 +18,14 @@
 # pragma warning (disable : 4661)		// don't know how to solve it
 #endif
 
-#include "GUIDOExport.h"
-#include "GUIDOEngine.h"
-#include "TRect.h"
-
 #include <utility>
 #include <vector>
 #include <map>
 #include <iostream>
+
+#include "GUIDOExport.h"
+#include "GUIDOEngine.h"
+#include "TRect.h"
 
 
 /*!
@@ -118,6 +118,20 @@ class MapCollector
 			\param infos information about the corresponding element.
 		*/
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos ) = 0;
+};
+
+class ExtendedMapCollector
+{
+	public:
+		virtual ~ExtendedMapCollector() {}
+		
+		/** \brief a method called by the GuidoGetMap function
+
+			\param box a graphic rectangle expressed with no scaling and no coordinates offset.
+			\param dates a time segment containing the corresponding start and end dates
+			\param infos information about the corresponding element.
+		*/
+		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos, void* el ) = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -315,6 +329,8 @@ GUIDOAPI bool	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSe
     __declspec(deprecated("Deprecated function (not maintained code)."))
 #endif
 GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel, std::vector<MapElement>& outMap);
+
+GUIDOAPI GuidoErrCode	GuidoGetExtendedSVGMap( GRHandler handle, int page, GuidoElementSelector sel, std::vector<GuidoExtendedMapElement>& outMap);
 
 /** \brief Retrieves the rolled to unrolled time mapping
 

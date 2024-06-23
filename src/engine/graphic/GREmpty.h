@@ -34,6 +34,7 @@ class GREmpty : public GREvent
 		virtual void accept (GRVisitor& visitor);
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const;
 		virtual void tellPosition( GObject * caller, const NVPoint & newPosition );
 		virtual bool isEmpty() const			{ return true; }
 

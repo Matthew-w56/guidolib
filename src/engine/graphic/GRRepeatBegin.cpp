@@ -107,6 +107,12 @@ void GRRepeatBegin::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos&
 		SendMap (f, getRelativeTimePosition(), getDuration(), kRepeatBegin, infos);
 }
 
+void GRRepeatBegin::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoBar || sel == kGuidoBarAndEvent)
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kRepeatBegin, infos);
+}
+
 // --------------------------------------------------------------------------
 void GRRepeatBegin::setHPosition( float nx )
 {

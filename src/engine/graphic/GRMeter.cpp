@@ -325,3 +325,9 @@ void GRMeter::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos
 	if (sel == kMeterSel)
 		SendMap (f, getRelativeTimePosition(), getDuration(), kMeter, infos);
 }
+
+void GRMeter::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kMeterSel)
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kMeter, infos);
+}

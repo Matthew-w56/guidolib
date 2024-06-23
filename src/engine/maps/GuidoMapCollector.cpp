@@ -144,7 +144,6 @@ void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeS
 //----------------------------------------------------------------------
 void GuidoMapCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
-	printf("GuidoMapCollector::process\n");
 	fOutMap = outmap;
 	if (!fOutMap) return;
 	GuidoGetMap( fGRHandler, page, w, h, fSelector, *this );
@@ -301,7 +300,6 @@ static bool scompare( const pair<TimeSegment, FloatRect>& a, const pair<TimeSegm
 // is extended toward left barline. For old behaviour, use GuidoStaffCollector::processV1.
 void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
-	printf("GuidoStaffCollector::process\n");
 	// We see if we have to process data or not (RAW)
 	if (fGetRAWdata)
 	{
@@ -332,7 +330,6 @@ void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* 
 // events x coordinate. To use new behaviour, see GuidoStaffCollector::process.
 void GuidoStaffCollector::processV1 (int page, float w, float h, Time2GraphicMap* outmap)
 {
-	printf("GuidoStaffCollector::processV1\n");
     // We see if we have to process data or not (RAW)
     if (fGetRAWdata)
     {
@@ -380,7 +377,6 @@ void GuidoMapCollector::getEvents (int page, float w, float h, bool keepLeftmost
 // barline. For old behaviour, use GuidoSystemCollector::processV1.
 void GuidoSystemCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
-	printf("GuidoSystemCollector::process\n");
 	Time2GraphicMap map, evmap, merged;
 	processNoDiv (page, w, h, &map);
     ///> A rest at a measure beginning has its segment box left value adjusted to the measure left.
@@ -394,7 +390,6 @@ void GuidoSystemCollector::process (int page, float w, float h, Time2GraphicMap*
 // To use the new behaviour, see GuidoSystemCollector::process.
 void GuidoSystemCollector::processV1 (int page, float w, float h, Time2GraphicMap* outmap)
 {
-	printf("GuidoSystemCollector::processV1\n");
     Time2GraphicMap map, evmap, merged;
     processNoDiv (page, w, h, &map);
 	
@@ -421,7 +416,6 @@ void GuidoSystemCollector::Graph2TimeMap( const FloatRect& box, const TimeSegmen
 //----------------------------------------------------------------------
 void GuidoSystemCollector::processNoDiv (int page, float w, float h, Time2GraphicMap* outmap)
 {
-	printf("GuidoSystemCollector::processNoDiv\n");
 	GuidoMapCollector systemCollector(fGRHandler, kGuidoSystem);
 	GuidoMapCollector slicesCollector(fGRHandler, kGuidoSystemSlice);
 

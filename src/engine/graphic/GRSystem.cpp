@@ -579,6 +579,42 @@ void GRSystem::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& info
 	infos.fPos.y -= mPosition.y;
 }
 
+void GRSystem::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kGuidoSystem) {
+		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kSystem, infos);
+		return;		// done !
+	}
+
+	infos.fPos.x += mPosition.x;
+	infos.fPos.y += mPosition.y;
+
+	int staffCount = 0;
+	if (mStaffs) {
+		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ ) {
+			GRStaff * staff = mStaffs->Get(i);
+			if (staff) {
+				staff->GetExtendedMap (sel, f, infos);
+				staffCount++;
+			}
+		}
+	}
+	else if (mSystemSlices.size() > 0 ) {
+		GuidoPos pos = mSystemSlices.GetHeadPosition();
+		while (pos) {
+			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
+			slice->GetExtendedMap (sel, f, infos);
+		}
+	}
+	if (( staffCount > 1 ) && ! mAccolade.empty()) {
+		for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
+			(*it)->GetExtendedMap (sel, f, infos);
+	}
+    GetSubElementsExtendedMap( sel, f, infos );
+	infos.fPos.x -= mPosition.x;
+	infos.fPos.y -= mPosition.y;
+}
+
 
 // ----------------------------------------------------------------------------
 void GRSystem::print(std::ostream& os) const

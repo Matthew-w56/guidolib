@@ -18,16 +18,18 @@
 
 */
 
+#include "GUIDOScoreMap.h"
+
 #include <iostream>
 #include <algorithm>
 
-#include "GUIDOScoreMap.h"
+
 #include "GUIDOInternal.h"
 #include "ARMusic.h"
 #include "GRMusic.h"
 #include "SVGDevice.h"
 #include "GuidoMapCollector.h"
-#include "MattMapCollector.h"
+#include "MattWrapper.h"
 
 using namespace std;
 using namespace guido;
@@ -43,6 +45,36 @@ class SVGMapCollector : public MapCollector
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 		{
 			fMap.push_back(make_pair(box, RectInfos(dates, infos)));
+		}
+};
+
+class ExtendedSVGMapCollector : public ExtendedMapCollector
+{
+	vector<GuidoExtendedMapElement>& fMap;
+
+	public:
+		ExtendedSVGMapCollector (vector<GuidoExtendedMapElement>& map) : fMap (map) {
+			fMap = map;
+		}
+		virtual ~ExtendedSVGMapCollector() {}
+		
+		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos, void* el )
+		{
+			GuidoExtendedMapElement mapEl;
+			mapEl.rect_top = box.top;
+			mapEl.rect_bottom = box.bottom;
+			mapEl.rect_left = box.left;
+			mapEl.rect_right = box.right;
+			mapEl.dur_start_num = dates.first.num;
+			mapEl.dur_start_den = dates.first.denom;
+			mapEl.dur_end_num = dates.second.num;
+			mapEl.dur_end_den = dates.second.denom;
+			mapEl.staffNum = infos.staffNum;
+			mapEl.voiceNum = infos.voiceNum;
+			mapEl.midiPitch = infos.midiPitch;
+			mapEl.type = infos.type;
+			mapEl.element = el;
+			fMap.push_back(mapEl);
 		}
 };
 
@@ -134,7 +166,6 @@ static GuidoErrCode checkParams( CGRHandler handle, int page)
 //----------------------------------------------------------------------
 GUIDOAPI GuidoErrCode	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoElementSelector sel, MapCollector& f)
 {
-	printf("GuidoGetMap (page %d) (w/h: %f/%f) (sel: %d)\n", page, w, h, sel);
 	GuidoErrCode err = checkParams (handle, page);
 	if (err != guidoNoErr) return err;
 	if ((sel < 0) || (sel >= kGuidoScoreElementEnd)) return guidoErrBadParameter;
@@ -144,7 +175,6 @@ GUIDOAPI GuidoErrCode	GuidoGetMap( CGRHandler handle, int page, float w, float h
 //----------------------------------------------------------------------
 GUIDOAPI GuidoErrCode	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
-	printf("GuidoGetPageMap\n");
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
 	GuidoMapCollector getmap (gr, kGuidoPage);
@@ -155,11 +185,9 @@ GUIDOAPI GuidoErrCode	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, floa
 //----------------------------------------------------------------------
 GUIDOAPI GuidoErrCode	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
 {
-	printf("GuidoGetStaffMap\n");
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
 	if (staff < 1) return guidoErrBadParameter; 
-	printf("- Got past checks in staffmap\n");
 	GuidoStaffCollector getmap (gr, staff);
 	getmap.process (pagenum, w, h, &outmap);
 	return guidoNoErr;
@@ -290,6 +318,22 @@ GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler handle, int page, GuidoElementSe
 	
 	SVGMapCollector collect(outMap);
 	handle->grmusic->GetMap( page, pf.width/SVGDevice::kSVGSizeDivider, pf.height/SVGDevice::kSVGSizeDivider, sel, collect );
+	return guidoNoErr;
+}
+
+GUIDOAPI GuidoErrCode	GuidoGetExtendedSVGMap( GRHandler handle, int page, GuidoElementSelector sel, vector<GuidoExtendedMapElement>& outMap)
+{
+	if( handle == 0 ) 	return guidoErrInvalidHandle;
+  	if( handle->grmusic == 0 ) return guidoErrInvalidHandle;
+  	if( page <= 0 )		return guidoErrBadParameter;
+	if ((sel < 0) || (sel >= kGuidoScoreElementEnd)) return guidoErrBadParameter;
+
+	GuidoPageFormat	pf;
+	GuidoResizePageToMusic (handle);
+	GuidoGetPageFormat (handle, page, &pf);
+	
+	ExtendedSVGMapCollector collect(outMap);
+	handle->grmusic->GetExtendedMap( page, pf.width/SVGDevice::kSVGSizeDivider, pf.height/SVGDevice::kSVGSizeDivider, sel, collect );
 	return guidoNoErr;
 }
 

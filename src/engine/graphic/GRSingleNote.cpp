@@ -114,6 +114,21 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 	}
 }
 
+void GRSingleNote::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
+{
+    if (fCluster) {
+        if (this == fCluster->getFirstNote())
+            fCluster->GetExtendedMap(sel, f, infos);
+    }
+    else if (sel == kGuidoEvent || sel == kGuidoBarAndEvent) {
+		TYPE_DURATION dur = getDuration();
+		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
+			dur = getDurTemplate();
+        }
+        SendExtendedMap (f, getARNote()->getRelativeTimePosition(), dur, (isGraceNote() ? kGraceNote : kNote), infos);
+	}
+}
+
 //____________________________________________________________________________________
 float GRSingleNote::getLedgeWidth (VGDevice & hdc) const
 {
@@ -835,8 +850,8 @@ float GRSingleNote::setStemLength( float inLen, bool userLength)
 		return (float)mGlobalStem->getStemLength();
 	}
 
-	if (mStemLengthSet)
-		GuidoWarn("Stemlength already set!");
+	//if (mStemLengthSet)
+	//	GuidoWarn("Stemlength already set!");
 
 	GRStem * stem = getStem();
 	if (stem)
