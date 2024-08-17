@@ -11,7 +11,7 @@ extern "C" {
 
 // -----------------[ Structs and others here ]-----------------
 
-typedef struct {
+struct gemeName {
 	int rect_top,
 		rect_bottom,
 		rect_left,
@@ -23,15 +23,21 @@ typedef struct {
 	int staffNum,
 		voiceNum;
 	int midiPitch;
+	// Ffigen will complain - We still need this.
+	// To build, just remove, run ffigen, and replace.
+	int dots = 0;
+	// Replace prev line with: int dots;
+	int accidental;
 	int type;
 	void* element;
-} GuidoExtendedMapElement;
+};
+
+typedef struct gemeName ExtMapElement;
 
 // -----------------[ Functions starting here ]-----------------
 
 // Constructors
-int mattWrapper_constructor();
-int mattWrapper_svgConstructor(int width, int height);
+int mattWrapper_svgConstructor();
 
 // Handler generators and free-ers
 void* mattWrapper_getNewARHandler();
@@ -55,9 +61,14 @@ void* mattWrapper_getBarAndEventMap(void* gr_ptr, int page, int* outmapSize);
 void* mattWrapper_getEventMap(void* gr_ptr, int page, int* outmapSize);
 void* mattWrapper_getClefMap(void* gr_ptr, int page, int* outmapSize);
 void* mattWrapper_getMeterMap(void* gr_ptr, int page, int* outmapSize);
+void* mattWrapper_getTagMap(void* gr_ptr, int page, int* outmapSize);
 void  mattWrapper_printMapItems(void* map, int mapSize);
 // Map getters
-GuidoExtendedMapElement mattWrapper_getElement(void* map, int mapSize, int x, int y, bool* successOut);
+ExtMapElement mattWrapper_getElementAtPos(void* map, int mapSize, int x, int y, bool* successOut);
+ExtMapElement mattWrapper_getElementAtPosIgnoreType(void* map, int mapSize, int x, int y, int type, bool* successOut);
+ExtMapElement mattWrapper_getElementAtVoiceTime(void* map, int mapSize, double time, int voice, int typeToIgnore, int midiPitch, bool* successOut);
+ExtMapElement mattWrapper_getElementAtStaffTime(void* map, int mapSize, double time, int staff, int typeToIgnore, int midiPitch, bool* successOut);
+ExtMapElement mattWrapper_getElementAtIndex(void* map, int mapSize, int index, bool* successOut);
 
 // Score info and misc.
 int mattWrapper_getScorePageCount(void* gr_ptr);

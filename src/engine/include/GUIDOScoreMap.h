@@ -38,13 +38,13 @@
 //------------------------------------------------------------------------------
 // graphic elements selector definitions
 typedef enum { 
-	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoBarAndEvent, kGuidoEvent, kClefSel, kMeterSel,
+	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoBarAndEvent, kGuidoEvent, kClefSel, kMeterSel, kTagSel,
 	kGuidoScoreElementEnd
 } GuidoElementSelector;
 
 // graphic elements type definitions
 typedef enum { 
-	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage, kGraceNote, kClef, kMeter
+	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage, kGraceNote, kClef, kMeter, kKey
 } GuidoElementType;
 
 
@@ -132,6 +132,7 @@ class ExtendedMapCollector
 			\param infos information about the corresponding element.
 		*/
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos, void* el ) = 0;
+		virtual void Graph2TimeMapForNotes( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos, const void* el ) = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -330,7 +331,7 @@ GUIDOAPI bool	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSe
 #endif
 GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel, std::vector<MapElement>& outMap);
 
-GUIDOAPI GuidoErrCode	GuidoGetExtendedSVGMap( GRHandler handle, int page, GuidoElementSelector sel, std::vector<GuidoExtendedMapElement>& outMap);
+GUIDOAPI GuidoErrCode	GuidoGetExtendedSVGMap( GRHandler handle, int page, GuidoElementSelector sel, std::vector<ExtMapElement>& outMap);
 
 /** \brief Retrieves the rolled to unrolled time mapping
 

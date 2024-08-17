@@ -125,7 +125,7 @@ void GRSingleNote::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollecto
 		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
 			dur = getDurTemplate();
         }
-        SendExtendedMap (f, getARNote()->getRelativeTimePosition(), dur, (isGraceNote() ? kGraceNote : kNote), infos);
+        SendExtendedMap (mMapping, f, getARNote()->getRelativeTimePosition(), dur, (isGraceNote() ? kGraceNote : kNote), infos);
 	}
 }
 

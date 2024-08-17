@@ -48,6 +48,10 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 
 		virtual void 	OnDraw(VGDevice & dev ) const;
       	virtual void 	recalcVerticalPosition();
+		
+		virtual void	GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos) const;
+		virtual void 	SendExtendedMap (const NVRect& r, ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
+		virtual void 	SendExtendedMap (ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
 
   protected:
 		int		mNatural;

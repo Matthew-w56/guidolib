@@ -306,3 +306,42 @@ bool GRKey::operator==(const GRTag &tag) const
 
 	return false;
 }
+
+void GRKey::SendExtendedMap (const NVRect& map, ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const
+{
+	FloatRect r (map.left, map.top, map.right, map.bottom);
+	r.Shift( infos.fPos.x, infos.fPos.y);
+	r.Scale( infos.fScale.x, infos.fScale.y);
+
+	GuidoDate from	= { date.getNumerator(), date.getDenominator() };
+	TYPE_TIMEPOSITION end = date + dur;
+	GuidoDate to	= { end.getNumerator(), end.getDenominator() };
+	TimeSegment dates (from, to);			// current rolled segment
+	GuidoElementInfos inf;
+	inf.type = type;
+	inf.staffNum = getStaffNumber();
+	if (inf.staffNum < 0) inf.staffNum = 0;
+
+	const ARMusicalObject * ar = getAbstractRepresentation();
+	inf.voiceNum = ar ? ar->getVoiceNum() : 0;
+
+    inf.midiPitch = this->mNumKeys;
+
+	f.Graph2TimeMap (r, dates, inf, (void*)this);
+}
+
+void GRKey::SendExtendedMap (ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const
+{
+	NVRect calculatedBox;
+	calculatedBox.top = mPosition.y;
+	calculatedBox.left = mPosition.x;
+	calculatedBox.bottom = mPosition.y + getBoundingBox().Height();
+	calculatedBox.right = mPosition.x + getBoundingBox().Width() - 5;
+	SendExtendedMap (calculatedBox, f, date, dur, type, infos);
+}
+
+void GRKey::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos) const {
+	if (sel == kTagSel) {
+		SendExtendedMap(f, getRelativeTimePosition(), getDuration(), kKey, infos);
+	}
+}

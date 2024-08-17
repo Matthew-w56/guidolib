@@ -128,6 +128,10 @@ void GRNotationElement::SendExtendedMap (const NVRect& map, ExtendedMapCollector
 
     const ARNote *arNote = dynamic_cast<const ARNote *>(ar);
     inf.midiPitch = (arNote ? arNote->getMidiPitch() : -1);
+	
+	if (type == GuidoElementType::kClef) {
+		inf.midiPitch = mSymbol;
+	}
 
 	f.Graph2TimeMap (r, dates, inf, (void*)this);
 }

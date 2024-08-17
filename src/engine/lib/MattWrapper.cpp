@@ -21,29 +21,14 @@ using std::vector;
 
 static char* textOutput;
 
-int mattWrapper_constructor() {
-	struct GuidoInitDesc initdesc = GuidoInitDesc();
-	return GuidoInit(&initdesc);
-}
-
 /**
  *  Initializes Guido with the preparation to draw SVGs.  The
  *  width and height given define the size of the SVG generated.
  *  
  *  Returns an error code.  0 == no problems
  */
-int mattWrapper_svgConstructor(int width, int height) {
-	// GuidoInitDesc desc;
-	// VGSystem * gSystem= new SVGSystem(_src_guido2_svg);
-	// desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
-	// desc.musicFont = "guido2";
-	// desc.textFont  = "Times";
-	// GuidoErrCode errcode = GuidoInit (&desc);
-	// return errcode;
-	
-	// return GuidoInitWithIndependentSVG();
-	
-	return GuidoInitWithIndependentSVGWithWH(width, height);
+int mattWrapper_svgConstructor() {
+	return GuidoInitWithIndependentSVG();
 }
 
 void* mattWrapper_getNewARHandler() {
@@ -115,7 +100,7 @@ void* mattWrapper_getMap(void* gr_ptr, int page, int selectorIn, int* outmapSize
 	GuidoElementSelector selector = static_cast<GuidoElementSelector>(selectorIn);
 	
 	// Empty vector to hold map output
-	vector<GuidoExtendedMapElement>* outmap = new vector<GuidoExtendedMapElement>();
+	vector<ExtMapElement>* outmap = new vector<ExtMapElement>();
 	
 	// Actuall run map get
 	int err = GuidoGetExtendedSVGMap(*grHandler, page, selector, *outmap);
@@ -180,54 +165,117 @@ void* mattWrapper_getClefMap(void* gr_ptr, int page, int* outmapSize) {
 void* mattWrapper_getMeterMap(void* gr_ptr, int page, int* outmapSize) {
 	return mattWrapper_getMap(gr_ptr, page, 8, outmapSize);  // kMeterSel
 }
+/// TODO: Document this.
+void* mattWrapper_getTagMap(void* gr_ptr, int page, int* outmapSize) {
+	return mattWrapper_getMap(gr_ptr, page, 9, outmapSize);  // kTagSel
+}
 
 // ------------------------[ End GetMap Variants ]---------------------------
 
-GuidoExtendedMapElement mattWrapper_getElement(void* map, int mapSize, int x, int y, bool* successOut) {
+ExtMapElement mattWrapper_getElementAtPosIgnoreType(void* map, int mapSize, int x, int y, int type, bool* successOut) {
 	*successOut = false;
-	GuidoExtendedMapElement* mapEls = static_cast<GuidoExtendedMapElement*>(map);
+	ExtMapElement* mapEls = static_cast<ExtMapElement*>(map);
 	for (int i = 0; i < mapSize; i++) {
-		GuidoExtendedMapElement element = mapEls[i];
+		ExtMapElement element = mapEls[i];
 		// If the bounds contain the click point
 		if (element.rect_top <= y && element.rect_bottom >= y 
-				&& element.rect_left <= x && element.rect_right >= x) {
+				&& element.rect_left <= x && element.rect_right >= x
+				&& element.type != type) {  // 3 is the code for empty
 			// Return the element found
 			*successOut = true;
 			return element;
 		}
 	}
 	// Return a placeholder element (successOut left blank)
-	return GuidoExtendedMapElement();
+	return ExtMapElement();
+}
+
+ExtMapElement mattWrapper_getElementAtPos(void* map, int mapSize, int x, int y, bool* successOut) {
+	return mattWrapper_getElementAtPosIgnoreType(map, mapSize, x, y, -7, successOut);
+}
+
+double getDivOf(int num, int den) { return ((double)num) / ((double)den); }
+
+ExtMapElement mattWrapper_getElementAtVoiceTime(void* map, int mapSize, double time, int voice, int typeToIgnore, int midiPitch, bool* successOut) {
+	*successOut = false;
+	ExtMapElement* mapEls = static_cast<ExtMapElement*>(map);
+	for (int i = 0; i < mapSize; i++) {
+		ExtMapElement element = mapEls[i];
+		if (element.dur_start_den == 0 || element.dur_end_den == 0) continue;
+		double elStartTime = getDivOf(element.dur_start_num, element.dur_start_den);
+		// If the duration of the element is at the given duration
+		if (elStartTime == time && element.voiceNum == voice && element.type != typeToIgnore
+			&& (midiPitch == -1 || midiPitch == element.midiPitch)) {
+			*successOut = true;
+			return element;
+		}
+	}
+	printf("Could not find an element at that time! (%f)\n", time);
+	std::cout.flush();
+	return ExtMapElement();
+}
+
+ExtMapElement mattWrapper_getElementAtStaffTime(void* map, int mapSize, double time, int staff, int typeToIgnore, int midiPitch, bool* successOut) {
+	*successOut = false;
+	ExtMapElement* mapEls = static_cast<ExtMapElement*>(map);
+	for (int i = 0; i < mapSize; i++) {
+		ExtMapElement element = mapEls[i];
+		if (element.dur_start_den == 0 || element.dur_end_den == 0) continue;
+		double elStartTime = getDivOf(element.dur_start_num, element.dur_start_den);
+		// If the duration of the element is at the given duration
+		if (elStartTime == time && element.staffNum == staff && element.type != typeToIgnore
+			&& (midiPitch == -1 || midiPitch == element.midiPitch)) {
+			*successOut = true;
+			return element;
+		}
+	}
+	printf("Could not find an element at that time! (%f)\n", time);
+	std::cout.flush();
+	return ExtMapElement();
+}
+
+ExtMapElement mattWrapper_getElementAtIndex(void* map, int mapSize, int index, bool* successOut) {
+	*successOut = false;
+	if (index >= mapSize || index < 0) return ExtMapElement();
+	ExtMapElement* mapEls = static_cast<ExtMapElement*>(map);
+	ExtMapElement el =  mapEls[index];
+	*successOut = true;
+	return el;
 }
 
 /**
  *  Prints the contents of the given map to std::out
  */
 void mattWrapper_printMapItems(void* map, int mapSize) {
-	GuidoExtendedMapElement* castedArr = (GuidoExtendedMapElement*)map;
+	ExtMapElement* castedArr = static_cast<ExtMapElement*>(map);
 	
-	printf("( [left, right] [top, bottom] ) maps to ( [start, end] ) from  Element at ( addr )");
+	printf("Elements of Guido Map:\n");
+	// printf("( [left, right] [top, bottom] ) maps to ( [start, end] ) with [pitch] and [type]");
 	for (size_t i = 0; i < mapSize; i++)
 	{
-		GuidoExtendedMapElement currEl = castedArr[i];
-		printf(
-			"( [%d,%d] [%d,%d] )  ( %d/%d, %d/%d )  (%p)\n",
-			currEl.rect_right,
-			currEl.rect_left,
-			currEl.rect_top,
-			currEl.rect_bottom,
+		ExtMapElement currEl = castedArr[i];
+		printf("Staff %d  Voice %d  Pitch %d  Type %d  Duration %d/%d-%d/%d  Hitbox: [(%d, %d), (%d, %d)]\n",
+			currEl.staffNum,
+			currEl.voiceNum,
+			currEl.midiPitch,
+			currEl.type,
 			currEl.dur_start_num,
 			currEl.dur_start_den,
 			currEl.dur_end_num,
 			currEl.dur_end_den,
-			currEl.element
+			currEl.rect_left,
+			currEl.rect_top,
+			currEl.rect_right,
+			currEl.rect_bottom
 		);
 	}
+	printf("\nDone with map elements!  Total Length: %d\n", mapSize);
 	std::cout.flush();
 }
 
 // ------------------------[ End Map Methods ]------------------------------
 
+// I don't think this works as-is..  Fober said we have to look for ARTitle obj.
 const char* mattWrapper_getScoreName(void* gr_ptr) {
 	GRHandler* grHandler = static_cast<GRHandler*>(gr_ptr);
 	const char* tempString = (*grHandler)->grmusic->getName().c_str();

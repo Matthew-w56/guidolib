@@ -50,6 +50,8 @@ class GRNote : public GREvent
 	
 	virtual	void	getPitchAndOctave( int * outPitch, int * outOctave, int * outAccidentals ) const;
 
+	virtual void SendExtendedMap (const NVRect& map, ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
+
 	virtual GDirection	getDefaultThroatDirection() const;
 	virtual GDirection	getThroatDirection() const;
 

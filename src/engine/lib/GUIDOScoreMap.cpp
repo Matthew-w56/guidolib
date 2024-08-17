@@ -30,6 +30,9 @@
 #include "SVGDevice.h"
 #include "GuidoMapCollector.h"
 #include "MattWrapper.h"
+#include "GRNote.h"
+#include "ARNote.h"
+#include "GRNoteDot.h"
 
 using namespace std;
 using namespace guido;
@@ -50,21 +53,21 @@ class SVGMapCollector : public MapCollector
 
 class ExtendedSVGMapCollector : public ExtendedMapCollector
 {
-	vector<GuidoExtendedMapElement>& fMap;
+	vector<ExtMapElement>& fMap;
 
 	public:
-		ExtendedSVGMapCollector (vector<GuidoExtendedMapElement>& map) : fMap (map) {
+		ExtendedSVGMapCollector (vector<ExtMapElement>& map) : fMap (map) {
 			fMap = map;
 		}
 		virtual ~ExtendedSVGMapCollector() {}
 		
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos, void* el )
 		{
-			GuidoExtendedMapElement mapEl;
-			mapEl.rect_top = box.top;
-			mapEl.rect_bottom = box.bottom;
-			mapEl.rect_left = box.left;
-			mapEl.rect_right = box.right;
+			ExtMapElement mapEl;
+			mapEl.rect_top = (int)box.top;
+			mapEl.rect_bottom = (int)box.bottom;
+			mapEl.rect_left = (int)box.left;
+			mapEl.rect_right = (int)box.right;
 			mapEl.dur_start_num = dates.first.num;
 			mapEl.dur_start_den = dates.first.denom;
 			mapEl.dur_end_num = dates.second.num;
@@ -74,6 +77,31 @@ class ExtendedSVGMapCollector : public ExtendedMapCollector
 			mapEl.midiPitch = infos.midiPitch;
 			mapEl.type = infos.type;
 			mapEl.element = el;
+			fMap.push_back(mapEl);
+		}
+		
+		virtual void Graph2TimeMapForNotes( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos, const void* el )
+		{
+			ExtMapElement mapEl;
+			mapEl.rect_top = (int)box.top;
+			mapEl.rect_bottom = (int)box.bottom;
+			mapEl.rect_left = (int)box.left;
+			mapEl.rect_right = (int)box.right;
+			mapEl.dur_start_num = dates.first.num;
+			mapEl.dur_start_den = dates.first.denom;
+			mapEl.dur_end_num = dates.second.num;
+			mapEl.dur_end_den = dates.second.denom;
+			mapEl.staffNum = infos.staffNum;
+			mapEl.voiceNum = infos.voiceNum;
+			mapEl.midiPitch = infos.midiPitch;
+			mapEl.type = infos.type;
+			mapEl.element = &el;
+			const ARNote* note = ((GRNote*)el)->getARNote();
+			mapEl.accidental = note->getAccidentals();
+			GRNoteDot* dot = ((GRNote*)el)->getDot();
+			if (dot != 0) {
+				mapEl.dots = dot->getNumDots();
+			}
 			fMap.push_back(mapEl);
 		}
 };
@@ -321,7 +349,7 @@ GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler handle, int page, GuidoElementSe
 	return guidoNoErr;
 }
 
-GUIDOAPI GuidoErrCode	GuidoGetExtendedSVGMap( GRHandler handle, int page, GuidoElementSelector sel, vector<GuidoExtendedMapElement>& outMap)
+GUIDOAPI GuidoErrCode	GuidoGetExtendedSVGMap( GRHandler handle, int page, GuidoElementSelector sel, vector<ExtMapElement>& outMap)
 {
 	if( handle == 0 ) 	return guidoErrInvalidHandle;
   	if( handle->grmusic == 0 ) return guidoErrInvalidHandle;

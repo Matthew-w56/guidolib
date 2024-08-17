@@ -39,6 +39,7 @@ class GRMeter : public GRTagARNotationElement
 		virtual void	accept (GRVisitor& visitor);
 		virtual void 	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void 	GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const;
+		virtual void	SendExtendedMap (const NVRect& map, ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
 		virtual void 	setHPosition( float inX );
 	
 		const ARMeter*	getARMeter() const;

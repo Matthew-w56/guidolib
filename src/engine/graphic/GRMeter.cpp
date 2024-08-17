@@ -28,6 +28,7 @@
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
 #include "FontManager.h"
 #include "secureio.h"
+#include "ARNote.h"
 
 using namespace std;
 
@@ -329,5 +330,37 @@ void GRMeter::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos
 void GRMeter::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kMeterSel)
-		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kMeter, infos);
+		GRNotationElement::SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kMeter, infos);
+}
+
+void GRMeter::SendExtendedMap (const NVRect& map, ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const
+{
+	FloatRect r (map.left, map.top, map.right, map.bottom);
+	r.Shift( infos.fPos.x, infos.fPos.y);
+	r.Scale( infos.fScale.x, infos.fScale.y);
+
+	GuidoDate from	= { date.getNumerator(), date.getDenominator() };
+	TYPE_TIMEPOSITION end = date + dur;
+	GuidoDate to	= { end.getNumerator(), end.getDenominator() };
+	GuidoElementInfos inf;
+	inf.type = type;
+	inf.staffNum = getStaffNumber();
+	if (inf.staffNum < 0) inf.staffNum = 0;
+
+	const ARMeter * ar = getARMeter();
+	inf.voiceNum = ar ? ar->getVoiceNum() : 0;
+	
+	if (ar) {
+		to = { ar->getNumerator(), ar->getDenominator() };
+	}
+	TimeSegment dates (from, to);			// current rolled segment
+
+    const ARNote *arNote = dynamic_cast<const ARNote *>(ar);
+    inf.midiPitch = (arNote ? arNote->getMidiPitch() : -1);
+	
+	if (type == GuidoElementType::kClef) {
+		inf.midiPitch = mSymbol;
+	}
+
+	f.Graph2TimeMap (r, dates, inf, (void*)this);
 }

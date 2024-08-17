@@ -144,3 +144,27 @@ void GRNote::setGRCluster(GRCluster *inCluster, bool inSignificativeNote)
     if (inSignificativeNote)
         inCluster->setSecondGRNote(this);
 }
+
+void GRNote::SendExtendedMap (const NVRect& map, ExtendedMapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const
+{
+	FloatRect r (map.left, map.top, map.right, map.bottom);
+	r.Shift( infos.fPos.x, infos.fPos.y);
+	r.Scale( infos.fScale.x, infos.fScale.y);
+
+	GuidoDate from	= { date.getNumerator(), date.getDenominator() };
+	TYPE_TIMEPOSITION end = date + dur;
+	GuidoDate to	= { end.getNumerator(), end.getDenominator() };
+	TimeSegment dates (from, to);			// current rolled segment
+	GuidoElementInfos inf;
+	inf.type = type;
+	inf.staffNum = getStaffNumber();
+	if (inf.staffNum < 0) inf.staffNum = 0;
+
+	const ARMusicalObject * ar = getAbstractRepresentation();
+	inf.voiceNum = ar ? ar->getVoiceNum() : 0;
+
+    const ARNote *arNote = dynamic_cast<const ARNote *>(ar);
+    inf.midiPitch = (arNote ? arNote->getMidiPitch() : -1);
+
+	f.Graph2TimeMapForNotes (r, dates, inf, this);
+}
