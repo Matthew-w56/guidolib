@@ -23,10 +23,7 @@ struct gemeName {
 	int staffNum,
 		voiceNum;
 	int midiPitch;
-	// Ffigen will complain - We still need this.
-	// To build, just remove, run ffigen, and replace.
-	int dots = 0;
-	// Replace prev line with: int dots;
+	int dots;
 	int accidental;
 	int type;
 	void* element;
@@ -51,6 +48,8 @@ int mattWrapper_parseFile(const char* path, void* ar_ptr);
 int mattWrapper_parseString(const char* data, void* ar_ptr);
 int mattWrapper_AR2GR(void* ar_ptr, void* gr_ptr);
 const char* mattWrapper_GR2SVG(void* gr_ptr, int page);
+// Midi stuff
+void mattWrapper_createMidiFile(void* ar_ptr, char* fileName);
 
 // Map Stuff
 void* mattWrapper_getMap(void* gr_ptr, int page, int selectorIn, int* outmapSize);

@@ -147,6 +147,12 @@ void GRNotationElement::SendExtendedMap (ExtendedMapCollector& f, TYPE_TIMEPOSIT
 	SendExtendedMap (mMapping, f, date, dur, type, infos);
 }
 
+void GRNotationElement::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f, MapInfos& infos) const {
+	if (sel == kTagSel) {
+		SendExtendedMap(f, getRelativeTimePosition(), getDuration(), kTie, infos);
+	}
+}
+
 // -------------------------------------------------------------------------
 void GRNotationElement::print(ostream& os) const
 {

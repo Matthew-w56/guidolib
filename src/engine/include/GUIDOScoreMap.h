@@ -44,7 +44,8 @@ typedef enum {
 
 // graphic elements type definitions
 typedef enum { 
-	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage, kGraceNote, kClef, kMeter, kKey
+	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage, kGraceNote, kClef, kMeter, kKey,
+	kAccidental, kTie
 } GuidoElementType;
 
 

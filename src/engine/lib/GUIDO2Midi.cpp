@@ -103,6 +103,7 @@ GUIDOAPI GuidoErrCode GuidoAR2MIDIFile( const ARHandler ar, const char* filename
 
 	ARMusic * arMusic = ar->armusic;
 	if( arMusic == 0 ) return guidoErrInvalidHandle;
+	
 
 	Guido2MidiParams defaultParams;
 	setDefault (defaultParams);

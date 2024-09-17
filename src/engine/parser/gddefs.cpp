@@ -117,6 +117,7 @@ int gd_noteName2pc (const char *name)
 	if (note == "empty")									return EMPTY;
 	if (note == "tab")										return REST;
 	std::cerr << "Unknown notename, replaced by rest." << std::endl;
+	std::cerr << "Notename was: " << note << std::endl;
 	return REST;
 }
 

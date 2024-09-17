@@ -75,6 +75,7 @@ class ExtendedSVGMapCollector : public ExtendedMapCollector
 			mapEl.staffNum = infos.staffNum;
 			mapEl.voiceNum = infos.voiceNum;
 			mapEl.midiPitch = infos.midiPitch;
+			mapEl.accidental = 0;
 			mapEl.type = infos.type;
 			mapEl.element = el;
 			fMap.push_back(mapEl);
@@ -101,6 +102,8 @@ class ExtendedSVGMapCollector : public ExtendedMapCollector
 			GRNoteDot* dot = ((GRNote*)el)->getDot();
 			if (dot != 0) {
 				mapEl.dots = dot->getNumDots();
+			} else {
+				mapEl.dots = 0;
 			}
 			fMap.push_back(mapEl);
 		}

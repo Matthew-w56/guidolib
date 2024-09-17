@@ -15,6 +15,7 @@
 #include "guido2.h"
 #include "ARMusic.h"
 #include "Guido2Midi.h"
+#include "Midi2Guido.h"
 
 using guido::GuidoMapCollector;
 using std::vector;
@@ -115,7 +116,8 @@ void* mattWrapper_getMap(void* gr_ptr, int page, int selectorIn, int* outmapSize
 	*outmapSize = (int)outmap->size();
 	
 	// Return opaque reference to map list
-	return &(outmap->at(0));
+	if (*outmapSize > 0) return &(outmap->at(0));
+	else return nullptr;
 }
 
 // --------------------------[ GetMap Variants ]-----------------------------
@@ -300,4 +302,10 @@ void mattWrapper_free(void* ptr) {
 int mattWrapper_getScorePageCount(void* gr_ptr) {
 	GRHandler* grHandler = static_cast<GRHandler*>(gr_ptr);
 	return (*grHandler)->grmusic->getNumPages();
+}
+
+void mattWrapper_createMidiFile(void* ar_ptr, char* fileName) {
+	ARHandler* arHandler = static_cast<ARHandler*>(ar_ptr);
+	Guido2MidiParams params;
+	GuidoAR2MIDIFile(*arHandler, fileName, nullptr);
 }

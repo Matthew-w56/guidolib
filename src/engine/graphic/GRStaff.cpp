@@ -2205,12 +2205,21 @@ void GRStaff::GetExtendedMap( GuidoElementSelector sel, ExtendedMapCollector& f,
 		SendExtendedMap (f, getRelativeTimePosition(), getDuration(), kStaff, infos);
 	}
 	else {
+		// printf("Staff children going now:\n");
 		//	DrawNotationElements
 		infos.fPos.y += mPosition.y;
 		GuidoPos pos = mCompElements.GetHeadPosition();
 		while (pos)
 		{
 			GRNotationElement * e = mCompElements.GetNext(pos);
+			// const ARMusicalObject* obj = e->getAbstractRepresentation();
+			// if (obj) {
+				// printf("Staff Child:\n");
+				// printf("  - name: %s\n", obj->getGMNName().data());
+				// std::cout << "  - time: " << obj->getRelativeTimePosition() << "\n"
+					// << "  - voice: " << obj->getVoiceNum() << "\n";
+			// }
+			// std::cout.flush();
 			if (e) e->GetExtendedMap(sel, f, infos);
 		}
 		infos.fPos.y -= mPosition.y;
