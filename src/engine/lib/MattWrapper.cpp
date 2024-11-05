@@ -15,7 +15,6 @@
 #include "guido2.h"
 #include "ARMusic.h"
 #include "Guido2Midi.h"
-#include "Midi2Guido.h"
 
 using guido::GuidoMapCollector;
 using std::vector;
